@@ -55,6 +55,16 @@ public class AREActivity extends Activity {
 	        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	    }
 	    
+	    private float ConvertX(float x, float width)
+	    {
+	    	return 1 -x * 2.0f / width;
+	    }
+	    
+	    private float ConvertY(float y, float height)
+	    {
+	    	return 1.3f -y * 2.6f / height;	   
+	    }	    
+	    
 	    
 	    @Override 
 	    public boolean onTouchEvent(MotionEvent e) {
@@ -65,14 +75,21 @@ public class AREActivity extends Activity {
 	        float x = e.getX();
 	        float y = e.getY();
 	        
+	        
+        	float width = (float)getWidth();
+        	float height = (float)getHeight();	        
 	        switch (e.getAction()) {
+	        
+	        
 	            case MotionEvent.ACTION_MOVE:
+	            	// add some points between where it was last touched and here 
+	            	mRenderer.AddPoint(ConvertX(x,width), ConvertY(y,height), 0);
+	            	requestRender();
 	                break;
 	                
 	            case MotionEvent.ACTION_UP:
-	            	float pX = (float)x / getHeight();
-	            	float pY = (float)y / getHeight();
-	            	mRenderer.AddPoint(pX, pY, 0);
+	    
+	            	mRenderer.AddPoint(ConvertX(x,width), ConvertY(y,height), 0);
 	            	requestRender();
 	            	break;
 	        }
